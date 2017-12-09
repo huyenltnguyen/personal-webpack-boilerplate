@@ -14,6 +14,11 @@ module.exports = {
     compress: true,
     hot: true
   },
+  resolve: {
+    alias: {
+      'masonry': 'masonry-layout'
+    }
+  },
   module: {
     rules: [
       {
@@ -43,6 +48,12 @@ module.exports = {
         ]
       },
       {
+        test: /\.woff2?$|\.ttf$|\.eot$|\.svg$/,
+        use: [{
+            loader: "file-loader"
+        }]
+      },
+      {
         test: /\.scss$/,
         use: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader']
       },
@@ -58,11 +69,16 @@ module.exports = {
     ]
   },
   plugins: [
+    new webpack.ProvidePlugin({
+      $: 'jquery',
+      jQuery: 'jquery'
+    }),
     new HtmlWebpackPlugin({
       template: './src/index.html',
       filename: './index.html'
     }),
     new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin()
-  ]
+  ],
+  devtool: 'source-map'
 };

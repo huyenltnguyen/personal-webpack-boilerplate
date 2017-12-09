@@ -8,7 +8,12 @@ module.exports = {
   entry: ['./src/js/index.js', './src/scss/main.scss'],
   output: {
     path: path.resolve(__dirname, 'build'),
-    filename: 'js/bundle.js',
+    filename: 'js/bundle.js'
+  },
+  resolve: {
+    alias: {
+      'masonry': 'masonry-layout'
+    }
   },
   module: {
     rules: [
@@ -24,19 +29,27 @@ module.exports = {
         ]
       },
       {
-        test: /\.(jpe?g|png|gif|svg)$/i,
+        test: /\.(jpe?g|png|gif|svg)$/,
         use: [
           {
-            loader: 'url-loader',
+            loader: "url-loader",
             options: {
-              name: 'img/[name].[ext]',
+              name: "./img/[name].[ext]",
               limit: 10000
             }
           },
           {
-            loader: 'img-loader'
+            loader: "img-loader"
           }
         ]
+      },
+      {
+        test: /\.woff2?$|\.ttf$|\.eot$|\.svg$/,
+        loader: "file-loader",
+        options: {
+          name: '[name].[ext]',
+          outputPath: 'fonts/'
+        }
       },
       {
         test: /\.scss$/,
@@ -64,6 +77,10 @@ module.exports = {
   },
   plugins: [
     new CleanWebpackPlugin(['build']),
+    new webpack.ProvidePlugin({
+      $: 'jquery',
+      jQuery: 'jquery'
+    }),
     new HtmlWebpackPlugin({
       template: './src/index.html',
       filename: './index.html'
